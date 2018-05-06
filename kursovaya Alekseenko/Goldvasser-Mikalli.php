@@ -5,71 +5,85 @@
  * Date: 05.05.2018
  * Time: 17:03
  */
+
+const NumberOfBites = 200;
+//Return array c
 function encr($message, $n, $y)
 {
-    for ($i = 0; $i <= strlen($message); $i++) {
-        $x = rand(1, $n - 1);
-        if ($message[$i] = 0) $c[$i] = gmp_powm($x, 2, $n);
-        else $c[$i] = $y * gmp_powm($x, 2, $n);
+    for ($i = 0; $i < strlen($message); $i++) {
+        $x = gmp_random_range(1, gmp_sub($n, 1));
+        if ($message[$i] == 0) {
+            $c[$i] = gmp_powm($x, 2, $n);
+        } else {
+            $c[$i] = gmp_mod(gmp_mul($y, gmp_powm($x, 2, $n)), $n);
+        }
     }
     return $c;
 }
 
+//Return Array m
 function decr($c, $p)
 {
+
     for ($i = 0; $i < count($c); $i++) {
-        if (gmp_legendre($c[$i], $p) == 1) $m[$i] = 0;
-        if (gmp_legendre($c[$i], $p) == -1) $m[$i] = 1;
+        if (gmp_legendre($c[$i], $p) == 1) {
+            $m[$i] = 0;
+        } else $m[$i] = 1;
     }
+    $m = implode($m);
     return $m;
 }
+
 
 function textBinASCII($text)
 {
     $bin = array();
     for ($i = 0; strlen($text) > $i; $i++)
         $bin[] = decbin(ord($text[$i]));
-//    return implode(' ',$bin);
     return $bin;
 }
 
 function ASCIIBinText($bin)
 {
-    $text = array();
-//    $bin = explode(" ", $bin);
-    for ($i = 0; count($bin) > $i; $i++)
-        $text[] = chr(bindec($bin[$i]));
-
-    return implode($text);
+    $text = chr(bindec($bin));
+    return $text;
 }
 
+//Return y
 function generateQuadrNevichet($n)
 {
     $k = 0;
     while ($k == 0) {
-        $y = rand(2, pow(2, 10));
-        if (gmp_legendre($y, $n) == 1) $k = 1;
+        $y = gmp_mod(gmp_random_bits(NumberOfBites), $n);
+        if (gmp_jacobi($y, $n) == -1) $k = 1;
     }
     return $y;
 }
 
-function generateSostavn(){
-    $p=gmp_nextprime(rand(pow(2,40),pow(2,50)));
-    $q=gmp_nextprime($p);
-    $n=$p*$q;
-    return [$n,$p];
+//Return n and q in array
+function generateSostavn()
+{
+    $p = gmp_nextprime(gmp_random_bits(NumberOfBites));
+    $q = gmp_nextprime($p);
+    $n = gmp_mul($p, $q);
+    return [$n, $p];
 }
 
 
-$message='hello';
-$byteMessage=textBinASCII($message);
+$message = 'kak dela?';
+echo "Alisa: " . $message . "\n";
+$byteMessage = textBinASCII($message);
 
-$n_p=generateSostavn();
-$n=$n_p[0];
-$p=$n_p[1];
-$y=generateQuadrNevichet($n);
+$n_p = generateSostavn();
+$n = $n_p[0];
+$p = $n_p[1];
+$y = generateQuadrNevichet($n);
+$finish = "";
+foreach ($byteMessage as $message) {
+    $encrypt = encr($message, $n, $y);
+    $decrypt = decr($encrypt, $p);
+    $finish = $finish . ASCIIBinText($decrypt);
+}
+echo "Bob: " . $finish;
 
-$c=encr($message,$n,$y);
-//$test = textBinASCII('da? huy na');
-//$finish = ASCIIBinText($test);
 
