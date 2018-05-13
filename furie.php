@@ -96,7 +96,7 @@ function foo($w, $k, $a, $m)
     return $b;
 }
 
-$b=foo(2,2,0123,5);
+$b=foo(2,2,4321,5);
 
 foreach ($b as $item) {
     echo $item.' ';
