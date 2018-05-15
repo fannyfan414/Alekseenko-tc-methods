@@ -10,7 +10,11 @@ const NumberOfBites = 20;
 //Return array c
 function encr($message, $n, $y)
 {
+<<<<<<< HEAD
     $c=array();
+=======
+    $c = array();
+>>>>>>> f60ce6871da2c7c1618e10339ae073a648b2acec
     for ($i = 0; $i < strlen($message); $i++) {
         $k=0;
         while ($k==0){
@@ -29,11 +33,15 @@ function encr($message, $n, $y)
 //Return Array m
 function decr($c, $p)
 {
+    $m = array();
 
     for ($i = 0; $i < count($c); $i++) {
+        echo "\n".gmp_legendre($c[$i], $p);
         if (gmp_legendre($c[$i], $p) == 1) {
             $m[$i] = 0;
-        } else $m[$i] = 1;
+        } else {
+            $m[$i] = 1;
+        }
     }
     $m = implode($m);
     return $m;
@@ -75,7 +83,7 @@ function generateSostavn()
 }
 
 
-$message = 'kak dela?';
+$message = 'test';
 echo "Alisa: " . $message . "\n";
 $byteMessage = textBinASCII($message);
 
@@ -90,5 +98,6 @@ foreach ($byteMessage as $message) {
     $finish = $finish . ASCIIBinText($decrypt);
 }
 echo "Bob: " . $finish;
+
 
 
