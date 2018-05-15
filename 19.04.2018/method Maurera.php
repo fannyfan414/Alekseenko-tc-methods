@@ -21,5 +21,4 @@ function Maurer($t){
 
     $p=gmp_nextprime(gmp_pow(2,$t_1));
 
-
 }

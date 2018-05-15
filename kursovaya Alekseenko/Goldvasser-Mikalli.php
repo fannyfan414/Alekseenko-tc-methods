@@ -6,12 +6,17 @@
  * Time: 17:03
  */
 
-const NumberOfBites = 200;
+const NumberOfBites = 20;
 //Return array c
 function encr($message, $n, $y)
 {
+    $c=array();
     for ($i = 0; $i < strlen($message); $i++) {
-        $x = gmp_random_range(1, gmp_sub($n, 1));
+        $k=0;
+        while ($k==0){
+            $x = gmp_random_range(1, gmp_sub($n, 1));
+            if(gmp_gcd($x,$n)==1) $k=1;
+        }
         if ($message[$i] == 0) {
             $c[$i] = gmp_powm($x, 2, $n);
         } else {
@@ -55,7 +60,7 @@ function generateQuadrNevichet($n)
     $k = 0;
     while ($k == 0) {
         $y = gmp_mod(gmp_random_bits(NumberOfBites), $n);
-        if (gmp_jacobi($y, $n) == -1) $k = 1;
+        if (gmp_legendre($y, $n) == -1) $k = 1;
     }
     return $y;
 }
