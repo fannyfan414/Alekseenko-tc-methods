@@ -7,7 +7,8 @@
  */
 function foo()
 {
-    $randomInt = random_int(pow(2, 10), pow(2, 15));
+    $randomInt = random_int(pow(2, 10), pow(2, 13));
+//    $randomInt=random_bytes(20);
     $s = gmp_nextprime($randomInt);
     $t = gmp_nextprime($s);
     echo "s:".$s;
@@ -56,4 +57,3 @@ function isPrime($x)
 }
 
 foo();
-//isPrime(5011);
