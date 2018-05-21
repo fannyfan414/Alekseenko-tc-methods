@@ -8,51 +8,34 @@
 
 function foo($n)
 {
-    $massiv=array();
+    $massiv = array();
     $k = 0;
     $number = 1;
-//    $prime = 2;
     while ($k < $n) {
-        if(FermEiler(getMultiples($number))){
-           $massiv[]=$number;
-           $k++;
+        if (FermEiler(getMultiples($number))) {
+            $massiv[] = $number;
+            $k++;
         }
-        $number+=1;
+        $number += 1;
     }
-//    while ($k < $n) {
-//        $prime = gmp_nextprime($prime);
-//        if (gmp_mod($prime, 4) != 1) {
-//            echo "\n".$prime;
-//            $k++;
-//        }
-//
-//    }
-    return [$k,$massiv];
+    return [$k, $massiv];
 }
 
 function getMultiples($number)
 {
-    static $count;
-    static $arr;
-    static $arrCount;
-    static $del = 2;
-
-    if ($number < 1) return false;
-    $count = isset($count) ? ++$count : 1;
-    if ($number == 1 && $count == 1) return [[1],[1]];
-    if ($number == 1 && $count > 1) return;
-    if (!isset($arr)) $arr = [];
-    if (!isset($arrCount)) $arrCount = [];
-
-    if ($number % $del == 0) {
-        $arr[] = $del;
-        $arrCount[$del] += 1;
-        getMultiples(gmp_intval($number / $del));
-        return [$arr, $arrCount];
+    $arr = array();
+    $arrCount = array();
+    $del = 2;
+    if ($number == 1) return [[1], [1]];
+    while ($number > 1) {
+        if ($number % $del == 0) {
+            $arrCount[$del] += 1;
+            $arr[] = $del;
+            $number = $number / $del;
+        } else {
+            $del = gmp_intval(gmp_nextprime($del));
+        }
     }
-
-    $del = (gmp_nextprime($del));
-    getMultiples($number);
     return [$arr, $arrCount];
 }
 
@@ -64,7 +47,7 @@ function FermEiler($arr)
     $specNumber = 0;
     while ($specNumber <= $numbers[count($numbers) - 1]) {
         $specNumber = 4 * $k + 3;
-        if (array_search($specNumber, $numbers)!==false && ($numberCount[$specNumber] % 2 != 0)) {
+        if (array_search($specNumber, $numbers) !== false && ($numberCount[$specNumber] % 2 != 0)) {
             return false;
         }
         $k++;
@@ -72,7 +55,8 @@ function FermEiler($arr)
     return true;
 }
 
-//$x=foo(4);
-//echo implode(" ",$x[1]);
-//var_dump(foo(3));
-//var_dump(FermEiler(getMultiples(4)));
+$x = foo(22);
+echo implode(" ", $x[1]);
+
+
+//var_dump(getMultiples(4));
