@@ -6,25 +6,22 @@
  * Time: 17:03
  */
 
-const NumberOfBites = 20;
+const NumberOfBites = 200;
 //Return array c
 function encr($message, $n, $y)
 {
-
-    $c=array();
-
     $c = array();
-
     for ($i = 0; $i < strlen($message); $i++) {
-        $k=0;
-        while ($k==0){
-            $x = gmp_random_range(1, gmp_sub($n, 1));
-            if(gmp_gcd($x,$n)==1) $k=1;
+
+        $k = 0;
+        while ($k == 0) {
+            $x = gmp_random_range(2, gmp_sub($n, 1));
+            if (gmp_gcd($x, $n) == 1) $k = 1;
         }
         if ($message[$i] == 0) {
-            $c[$i] = gmp_powm($x, 2, $n);
+            $c[$i] = gmp_powm($x, gmp_init(2), $n);
         } else {
-            $c[$i] = gmp_mod(gmp_mul($y, gmp_powm($x, 2, $n)), $n);
+            $c[$i] = gmp_mod(gmp_mul($y, gmp_powm($x, 2,$n)), $n);
         }
     }
     return $c;
@@ -34,14 +31,19 @@ function encr($message, $n, $y)
 function decr($c, $p)
 {
     $m = array();
-
     for ($i = 0; $i < count($c); $i++) {
-//        echo "\n".gmp_legendre($c[$i], $p);
-        if (gmp_legendre($c[$i], $p) == 1) {
-            $m[$i] = 0;
-        } else {
-            $m[$i] = 1;
+//        if (gmp_legendre($c[$i], $p) == 1) {
+//            $m[$i] = 0;
+//        } else {
+//            $m[$i] = 1;
+//        }
+
+        if(gmp_powm($c[$i],gmp_div(gmp_sub($p,1),2),$p)==1){
+            $m[$i]=0;
+        }else{
+            $m[$i]=1;
         }
+
     }
     $m = implode($m);
     return $m;
@@ -68,7 +70,7 @@ function generateQuadrNevichet($n)
     $k = 0;
     while ($k == 0) {
         $y = gmp_mod(gmp_random_bits(NumberOfBites), $n);
-        if (gmp_legendre($y, $n) == -1) $k = 1;
+        if (gmp_legendre($y, $n) == gmp_init(-1))    $k = 1;
     }
     return $y;
 }

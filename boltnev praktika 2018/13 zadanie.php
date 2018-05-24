@@ -23,15 +23,18 @@ function foo($n)
 
 function getMultiples($number)
 {
+
     $arr = array();
     $arrCount = array();
     $del = 2;
+
     if ($number == 1) return [[1], [1]];
     while ($number > 1) {
         if ($number % $del == 0) {
             $arrCount[$del] += 1;
             $arr[] = $del;
             $number = $number / $del;
+
         } else {
             $del = gmp_intval(gmp_nextprime($del));
         }
@@ -55,8 +58,11 @@ function FermEiler($arr)
     return true;
 }
 
-$x = foo(22);
+$x = foo(10);
 echo implode(" ", $x[1]);
 
 
+//$x=(getMultiples(gmp_fact(20)));
+//echo implode("*",$x[0]);
+//echo "\n".implode("*",$x[1]);
 //var_dump(getMultiples(4));
